@@ -1,0 +1,7 @@
+# すべて無視
+*
+
+# 以下はGit管理に含める
+!.gitignore
+!zshrc
+!tmux.conf
