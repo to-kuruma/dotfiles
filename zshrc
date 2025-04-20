@@ -2,7 +2,11 @@
 # 環境変数設定
 ############################  
 export PATH=$HOME/.nodebrew/current/bin:$PATH
-eval 
+
+# Ruby:rbenv設定
+export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/.rbenv/shims:$PATH"
+# eval "$(rbenv init -)"
 
 ############################  
 # エイリアス設定
@@ -49,15 +53,31 @@ source "/usr/local/opt/zsh-git-prompt/zshrc.sh"
 ## old:%n@%m %1~ %#
 ############################  
 
+# git_prompt() {
+#   if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = true ]; then
+#     # PROMPT="%F{034}%h%f:%F{020}%~%f $(git_super_status)"$'\n'"%# "
+#     PROMPT="%F{green}%n %F{cyan}%~%f $(git_super_status)"$'\n'"%# "
+#   else
+#     # PROMPT="%F{034}%h%f:%F{020}%~%f "$'\n'"%# "
+#     PROMPT="%F{green}%n %F{cyan}%~%f "$'\n'"%# "
+#   fi
+# }
 git_prompt() {
-  if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = true ]; then
-    # PROMPT="%F{034}%h%f:%F{020}%~%f $(git_super_status)"$'\n'"%# "
-    PROMPT="%F{green}%n %F{cyan}%~%f $(git_super_status)"$'\n'"%# "    
+  # 仮想環境名を取得（無ければ空）
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    venv_name="(%{$fg[yellow]%}$(basename $VIRTUAL_ENV)%{$reset_color%}) "
   else
-    # PROMPT="%F{034}%h%f:%F{020}%~%f "$'\n'"%# "
-    PROMPT="%F{green}%n %F{cyan}%~%f "$'\n'"%# "
+    venv_name=""
+  fi
+
+  # Gitがワークツリー内なら表示を追加
+  if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = true ]; then
+    PROMPT="${venv_name}%F{green}%n %F{cyan}%~%f $(git_super_status)"$'\n'"%# "
+  else
+    PROMPT="${venv_name}%F{green}%n %F{cyan}%~%f"$'\n'"%# "
   fi
 }
+
 ZSH_THEME_GIT_PROMPT_PREFIX="["
 ZSH_THEME_GIT_PROMPT_SUFFIX="]"
 ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg[white]%}"
