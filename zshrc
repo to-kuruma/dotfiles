@@ -30,38 +30,31 @@ autoload -Uz colors && colors
 ## nvm
 ### 未インストール
 
-
-## zsh-completions
+## zsh-completions + zsh-autosuggestions
+## 補完機能を有効 / コマンド履歴に基づくコマンド候補
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-  autoload -Uz compinit && compinit
-fi
-
-## zsh-autosuggestions
-if type brew &>/dev/null; then
-  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-  source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   autoload -Uz compinit && compinit
 fi
 
 ## zsh-git-prompt
-#source $(brew --prefix)/opt/zsh-git-prompt/zshrc.sh
-source "/usr/local/opt/zsh-git-prompt/zshrc.sh"
+source $(brew --prefix)/opt/zsh-git-prompt/zshrc.sh
 
 ############################  
 # プロンプト設定
 ## old:%n@%m %1~ %#
 ############################  
 
-# git_prompt() {
-#   if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = true ]; then
-#     # PROMPT="%F{034}%h%f:%F{020}%~%f $(git_super_status)"$'\n'"%# "
-#     PROMPT="%F{green}%n %F{cyan}%~%f $(git_super_status)"$'\n'"%# "
-#   else
-#     # PROMPT="%F{034}%h%f:%F{020}%~%f "$'\n'"%# "
-#     PROMPT="%F{green}%n %F{cyan}%~%f "$'\n'"%# "
-#   fi
-# }
+git_prompt() {
+  if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = true ]; then
+    # PROMPT="%F{034}%h%f:%F{020}%~%f $(git_super_status)"$'\n'"%# "
+    PROMPT="%F{green}%n %F{cyan}%~%f $(git_super_status)"$'\n'"%# "
+  else
+    # PROMPT="%F{034}%h%f:%F{020}%~%f "$'\n'"%# "
+    PROMPT="%F{green}%n %F{cyan}%~%f "$'\n'"%# "
+  fi
+}
 git_prompt() {
   # 仮想環境名を取得（無ければ空）
   if [[ -n "$VIRTUAL_ENV" ]]; then
